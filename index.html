@@ -196,6 +196,16 @@
         </button>
       </div>
 
+      <button id="btn-mis-tareas" class="btn w-full mt-4 bg-teal-600 hover:bg-teal-700 text-white text-xl font-extrabold rounded-3xl shadow-lg flex items-center justify-center gap-3">
+        <span class="text-3xl">📌</span> MIS TAREAS
+        <span id="badge-tareas" class="hidden bg-white text-teal-700 text-sm font-extrabold rounded-full px-2.5 py-0.5">0</span>
+      </button>
+
+      <button id="btn-tiempo-extra" class="btn w-full mt-3 bg-amber-600 hover:bg-amber-700 text-white text-xl font-extrabold rounded-3xl shadow-lg flex items-center justify-center gap-3">
+        <span class="text-3xl">⏰</span> TIEMPO EXTRA
+        <span id="badge-extra" class="hidden bg-white text-amber-700 text-sm font-extrabold rounded-full px-2.5 py-0.5">0</span>
+      </button>
+
       <button id="btn-mis-solicitudes" class="btn-sm w-full mt-3 bg-white shadow-sm text-slate-700 font-bold rounded-2xl flex items-center justify-center gap-2">
         <span class="text-lg">📨</span> Ver mis peticiones
         <span id="badge-respuestas" class="hidden bg-red-600 text-white text-[11px] font-extrabold rounded-full px-2 py-0.5">0</span>
@@ -394,6 +404,63 @@
     </section>
 
     <!-- ==================================================== -->
+    <!-- PANTALLA MIS TAREAS (empleado)                       -->
+    <!-- ==================================================== -->
+    <section id="pantalla-mis-tareas" class="hidden fade-in">
+      <div class="flex items-center justify-between px-1">
+        <h2 class="text-xl font-extrabold">📌 Mis tareas</h2>
+        <button id="btn-volver-inicio-3" class="btn-sm text-blue-700 font-bold px-2">← Inicio</button>
+      </div>
+      <p class="text-sm text-slate-500 px-1 mt-1">Tareas que te asignó la dirección.</p>
+      <div id="lista-mis-tareas" class="mt-3 space-y-3"></div>
+    </section>
+
+    <!-- ==================================================== -->
+    <!-- PANTALLA: TIEMPO EXTRA DEL EMPLEADO                  -->
+    <!-- ==================================================== -->
+    <section id="pantalla-tiempo-extra" class="hidden fade-in">
+      <div class="flex items-center justify-between px-1">
+        <h2 class="text-xl font-extrabold">⏰ Tiempo extra</h2>
+        <button id="btn-volver-inicio-4" class="btn-sm text-blue-700 font-bold px-2">← Inicio</button>
+      </div>
+      <p class="text-sm text-slate-500 px-1 mt-1">Si te quedaste más tiempo, repórtalo aquí. La dirección lo revisa y lo aprueba.</p>
+
+      <div class="bg-white rounded-3xl shadow p-5 mt-3">
+        <label class="block">
+          <span class="text-sm font-bold text-slate-600">¿Qué día te quedaste más tiempo?</span>
+          <input id="ex-fecha" type="date"
+                 class="mt-1 w-full rounded-2xl border-2 border-slate-200 px-4 py-4 text-base focus:border-amber-600 focus:outline-none">
+        </label>
+
+        <p class="text-sm font-bold text-slate-600 mt-4">¿Cuánto tiempo extra?</p>
+        <div class="flex items-center justify-between gap-3 mt-2">
+          <button id="ex-menos" class="btn bg-slate-100 text-slate-700 text-3xl font-extrabold rounded-2xl w-20">−</button>
+          <div class="flex-1 text-center bg-amber-50 border-2 border-amber-200 rounded-2xl py-3">
+            <p id="ex-horas" class="text-4xl font-extrabold text-amber-700 leading-none">1</p>
+            <p id="ex-horas-txt" class="text-xs font-bold text-amber-700 mt-1">hora</p>
+          </div>
+          <button id="ex-mas" class="btn bg-amber-600 text-white text-3xl font-extrabold rounded-2xl w-20">+</button>
+        </div>
+        <p class="text-[11px] text-slate-400 text-center mt-1">Sube de media hora en media hora.</p>
+
+        <label class="block mt-4">
+          <span class="text-sm font-bold text-slate-600">¿Por qué te quedaste?</span>
+          <textarea id="ex-motivo" rows="3" maxlength="1000" placeholder="Ejemplo: Me quedé a terminar de pintar el salón"
+                    class="mt-1 w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base focus:border-amber-600 focus:outline-none"></textarea>
+        </label>
+
+        <p id="ex-error" class="hidden text-center text-red-600 font-bold mt-3 text-sm">—</p>
+
+        <button id="btn-enviar-extra" class="btn w-full mt-4 bg-amber-600 hover:bg-amber-700 text-white text-xl font-extrabold rounded-3xl shadow-lg flex items-center justify-center gap-3">
+          <span class="text-2xl">📤</span> ENVIAR
+        </button>
+      </div>
+
+      <h3 class="text-base font-extrabold px-1 mt-5">Mis reportes de tiempo extra</h3>
+      <div id="lista-mis-extras" class="mt-2 space-y-3"></div>
+    </section>
+
+    <!-- ==================================================== -->
     <!-- PANTALLA ADMIN                                       -->
     <!-- ==================================================== -->
     <section id="pantalla-admin" class="hidden fade-in">
@@ -403,6 +470,8 @@
           <button data-tab="resumen"     class="tab btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap">📊 Resumen</button>
           <button data-tab="calendario"  class="tab btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap">📅 Calendario</button>
           <button data-tab="empleados"   class="tab btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap">👷 Empleados</button>
+          <button data-tab="tareas"      class="tab btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap">📌 Tareas <span id="admin-badge-tar" class="hidden bg-red-600 text-white text-[10px] rounded-full px-1.5">0</span></button>
+          <button data-tab="extra"       class="tab btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap">⏰ Tiempo extra <span id="admin-badge-ext" class="hidden bg-red-600 text-white text-[10px] rounded-full px-1.5">0</span></button>
           <button data-tab="nomina"      class="tab btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap">💵 Nómina</button>
           <button data-tab="reportes"    class="tab btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap">📋 Reportes</button>
           <button data-tab="peticiones"  class="tab btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap">📨 Peticiones <span id="admin-badge-pet" class="hidden bg-red-600 text-white text-[10px] rounded-full px-1.5">0</span></button>
@@ -421,6 +490,9 @@
       </div>
 
       <!-- TAB RESUMEN -->
+      <div id="tab-tareas" class="tab-panel hidden mt-4"></div>
+
+      <div id="tab-extra" class="tab-panel hidden mt-4"></div>
       <div id="tab-resumen" class="tab-panel hidden mt-4"></div>
 
       <!-- TAB CALENDARIO -->
@@ -599,6 +671,8 @@ const K = {
   empleados:   "khepani_empleados",
   jornadas:    "khepani_jornadas",
   solicitudes: "khepani_solicitudes",
+  tareas:      "khepani_tareas",
+  extras:      "khepani_extras",
   fotos:       "khepani_fotos",
   ajustes:     "khepani_ajustes",
   cfg:         "khepani_firebase_cfg",
@@ -624,6 +698,24 @@ function fechaLarga(d) {
   return DIAS_LARGOS[d.getDay()] + ", " + d.getDate() + " de " + MESES[d.getMonth()] + " de " + d.getFullYear();
 }
 const DIAS_LARGOS = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+/* Convierte "2026-08-11" en texto sin que el huso horario mueva el día */
+function fechaBonita(iso) {
+  const d = deISO(iso);
+  return d ? fechaLarga(d) : String(iso || "");
+}
+/* Version corta que no se parte en dos lineas: "mar 11 ago 2026" */
+function fechaCortita(iso) {
+  const d = deISO(iso);
+  if (!d) return String(iso || "");
+  return DIAS_LARGOS[d.getDay()].slice(0, 3) + " " + d.getDate() + " " +
+         MESES[d.getMonth()].slice(0, 3) + " " + d.getFullYear();
+}
+function deISO(iso) {
+  const p = String(iso || "").split("-");
+  if (p.length !== 3) return null;
+  const d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  return isNaN(d.getTime()) ? null : d;
+}
 function horasTexto(min) {
   const m = Math.max(0, Math.round(min || 0));
   return Math.floor(m / 60) + " h " + (m % 60) + " min";
@@ -744,15 +836,19 @@ const Datos = {
   empleados: Almacen.leerJSON(K.empleados, []),
   jornadas: Almacen.leerJSON(K.jornadas, []),
   solicitudes: Almacen.leerJSON(K.solicitudes, []),
+  tareas: Almacen.leerJSON(K.tareas, []),
+  extras: Almacen.leerJSON(K.extras, []),
   fotos: Almacen.leerJSON(K.fotos, {}),
   ajustes: Object.assign(
-    { horaObjetivo: "08:00", toleranciaMin: 10, diasLaborales: [1, 2, 3, 4, 5], jornadaEsperadaHoras: 8, pagados: {} },
+    { horaObjetivo: "08:00", toleranciaMin: 10, diasLaborales: [1, 2, 3, 4, 5], jornadaEsperadaHoras: 8, pagados: {}, tarifaExtra: 0 },
     Almacen.leerJSON(K.ajustes, {})
   ),
 
   guardarEmpleados() { Almacen.ponerJSON(K.empleados, this.empleados); },
   guardarJornadas() { Almacen.ponerJSON(K.jornadas, this.jornadas); },
   guardarSolicitudes() { Almacen.ponerJSON(K.solicitudes, this.solicitudes); },
+  guardarTareas() { Almacen.ponerJSON(K.tareas, this.tareas); },
+  guardarExtras() { Almacen.ponerJSON(K.extras, this.extras); },
   guardarAjustes() { Almacen.ponerJSON(K.ajustes, this.ajustes); },
   guardarFotos() {
     if (!Almacen.ponerJSON(K.fotos, this.fotos)) {
@@ -764,7 +860,45 @@ const Datos = {
   },
 
   empleado(usuario) { return this.empleados.find((e) => e.usuario === usuario) || null; },
+  tareasDe(usuario) {
+    return this.tareas
+      .filter((t) => t.usuario === usuario && t.estado !== "cancelada")
+      .sort((a, b) => {
+        const pa = a.estado === "pendiente" ? 0 : 1, pb = b.estado === "pendiente" ? 0 : 1;
+        if (pa !== pb) return pa - pb;
+        const ua = a.prioridad === "urgente" ? 0 : 1, ub = b.prioridad === "urgente" ? 0 : 1;
+        if (ua !== ub) return ua - ub;
+        return String(b.creado || "").localeCompare(String(a.creado || ""));
+      });
+  },
+  tareasPendientesDe(usuario) {
+    return this.tareas.filter((t) => t.usuario === usuario && t.estado === "pendiente");
+  },
   jornadasDe(usuario) { return this.jornadas.filter((j) => j.usuario === usuario); },
+
+  /* ---------- TIEMPO EXTRA ---------- */
+  extrasDe(usuario) {
+    return this.extras
+      .filter((x) => x.usuario === usuario)
+      .sort((a, b) => String(b.fecha || "").localeCompare(String(a.fecha || "")));
+  },
+  extrasPorAprobar() { return this.extras.filter((x) => x.estado === "pendiente"); },
+  /* Solo el tiempo extra APROBADO cuenta para el pago */
+  extrasAprobadosEn(usuario, q) {
+    const { ini, fin } = rangoQuincena(q);
+    const desde = fechaISO(ini), hasta = fechaISO(fin);
+    return this.extras.filter((x) =>
+      x.usuario === usuario && x.estado === "aprobada" &&
+      String(x.fecha || "") >= desde && String(x.fecha || "") <= hasta);
+  },
+  horasExtraDe(usuario, q) {
+    return this.extrasAprobadosEn(usuario, q)
+      .reduce((s, x) => s + (Number(x.horas) || 0), 0);
+  },
+  pagoExtraDe(usuario, q) {
+    return this.extrasAprobadosEn(usuario, q)
+      .reduce((s, x) => s + (Number(x.monto) || 0), 0);
+  },
   fotosDe(idJornada) { return this.fotos[idJornada] || []; },
 
   upsertEmpleado(emp) {
@@ -789,6 +923,20 @@ const Datos = {
     else this.solicitudes.push(s);
     this.guardarSolicitudes();
     Nube.escribir("khepani_solicitudes", s.id, this.solicitudes.find((x) => x.id === s.id));
+  },
+  upsertTarea(t) {
+    const i = this.tareas.findIndex((x) => x.id === t.id);
+    if (i >= 0) this.tareas[i] = Object.assign({}, this.tareas[i], t);
+    else this.tareas.push(t);
+    this.guardarTareas();
+    Nube.escribir("khepani_tareas", t.id, this.tareas.find((x) => x.id === t.id));
+  },
+  upsertExtra(x) {
+    const i = this.extras.findIndex((y) => y.id === x.id);
+    if (i >= 0) this.extras[i] = Object.assign({}, this.extras[i], x);
+    else this.extras.push(x);
+    this.guardarExtras();
+    Nube.escribir("khepani_extras", x.id, this.extras.find((y) => y.id === x.id));
   }
 };
 
@@ -846,7 +994,9 @@ const Nube = {
     const pares = [
       ["khepani_empleados", "empleados", "guardarEmpleados", "usuario"],
       ["khepani_jornadas", "jornadas", "guardarJornadas", "id"],
-      ["khepani_solicitudes", "solicitudes", "guardarSolicitudes", "id"]
+      ["khepani_solicitudes", "solicitudes", "guardarSolicitudes", "id"],
+      ["khepani_tareas", "tareas", "guardarTareas", "id"],
+      ["khepani_extras", "extras", "guardarExtras", "id"]
     ];
     pares.forEach(([col, campo, guardar, llave]) => {
       try {
@@ -930,7 +1080,8 @@ function tic() {
 
 /* ============================ NAVEGACIÓN ============================ */
 const PANTALLAS = ["pantalla-login","pantalla-registro","pantalla-inicio","pantalla-trabajo",
-                   "pantalla-final","pantalla-solicitud","pantalla-mis-solicitudes","pantalla-admin"];
+                   "pantalla-final","pantalla-solicitud","pantalla-mis-solicitudes",
+                   "pantalla-mis-tareas","pantalla-tiempo-extra","pantalla-admin"];
 let pantallaActual = "pantalla-login";
 
 function mostrar(id) {
@@ -953,8 +1104,10 @@ function mostrar(id) {
 const Vista = {
   refrescar() {
     if (pantallaActual === "pantalla-admin") Admin.pintar();
-    if (pantallaActual === "pantalla-inicio") { pintarHistorial(); pintarMisKpis(); pintarBadge(); }
+    if (pantallaActual === "pantalla-inicio") { pintarHistorial(); pintarMisKpis(); pintarBadge(); pintarBadgeTareas(); pintarBadgeExtra(); }
     if (pantallaActual === "pantalla-mis-solicitudes") pintarMisSolicitudes();
+    if (pantallaActual === "pantalla-mis-tareas") pintarMisTareas();
+    if (pantallaActual === "pantalla-tiempo-extra") pintarMisExtras();
     if (pantallaActual === "pantalla-login") pintarUsuariosRecientes();
   }
 };
@@ -1170,7 +1323,7 @@ function irAInicio() {
   const h = new Date().getHours();
   const saludo = h < 12 ? "¡Buen día" : h < 19 ? "¡Buenas tardes" : "¡Buenas noches";
   $("saludo").textContent = saludo + ", " + Sesion.emp.nombre.split(" ")[0] + "!";
-  pintarHistorial(); pintarMisKpis(); pintarBadge();
+  pintarHistorial(); pintarMisKpis(); pintarBadge(); pintarBadgeTareas(); pintarBadgeExtra();
   mostrar("pantalla-inicio");
 }
 
@@ -1438,6 +1591,245 @@ function pintarBadge() {
   b.classList.toggle("hidden", n === 0);
 }
 
+/* ============================ TAREAS DEL EMPLEADO ============================ */
+function pintarBadgeTareas() {
+  const b = $("badge-tareas");
+  if (!b) return;
+  const n = Datos.tareasPendientesDe(Sesion.usuario).length;
+  b.textContent = n;
+  b.classList.toggle("hidden", n === 0);
+}
+
+function diasRestantes(fechaLimite) {
+  if (!fechaLimite) return null;
+  const p = String(fechaLimite).split("-");
+  if (p.length !== 3) return null;
+  const lim = new Date(+p[0], +p[1] - 1, +p[2]);
+  const hoy = new Date();
+  lim.setHours(0, 0, 0, 0); hoy.setHours(0, 0, 0, 0);
+  return Math.round((lim - hoy) / 86400000);
+}
+
+function etiquetaLimite(fechaLimite) {
+  const d = diasRestantes(fechaLimite);
+  if (d === null) return "";
+  if (d < 0) return { t: "Atrasada " + plural(-d, "1 día", -d + " días"), cls: "bg-red-100 text-red-800" };
+  if (d === 0) return { t: "Para hoy", cls: "bg-amber-100 text-amber-800" };
+  if (d === 1) return { t: "Para mañana", cls: "bg-amber-100 text-amber-800" };
+  return { t: "En " + d + " días", cls: "bg-slate-100 text-slate-600" };
+}
+
+function pintarMisTareas() {
+  const cont = $("lista-mis-tareas");
+  if (!cont) return;
+  const mias = Datos.tareasDe(Sesion.usuario);
+  cont.innerHTML = "";
+
+  mias.forEach((t) => {
+    if (t.estado === "pendiente" && !t.vistoEmpleado) {
+      Datos.upsertTarea({ id: t.id, vistoEmpleado: true, actualizado: new Date().toISOString() });
+    }
+  });
+
+  if (!mias.length) {
+    cont.innerHTML = '<div class="bg-white rounded-3xl shadow p-6 text-center text-slate-500">' +
+      '<p class="text-5xl">🎉</p><p class="font-bold mt-2">No tienes tareas pendientes</p>' +
+      '<p class="text-sm mt-1">Cuando la dirección te asigne una, aparecerá aquí.</p></div>';
+    return;
+  }
+
+  mias.forEach((t) => {
+    const hecha = t.estado === "hecha";
+    const urgente = t.prioridad === "urgente";
+    const lim = etiquetaLimite(t.fechaLimite);
+    const div = document.createElement("div");
+    div.className = "bg-white rounded-2xl shadow-sm p-4 " +
+      (hecha ? "opacity-70" : urgente ? "border-2 border-red-300" : "");
+    div.innerHTML =
+      '<div class="flex items-start gap-2">' +
+        '<span class="text-2xl shrink-0">' + (hecha ? "✅" : urgente ? "🔴" : "📌") + '</span>' +
+        '<div class="min-w-0 flex-1">' +
+          '<p class="font-extrabold leading-tight ' + (hecha ? "line-through text-slate-400" : "") + '">' + esc(t.titulo) + '</p>' +
+          '<div class="flex flex-wrap gap-1.5 mt-1.5">' +
+            (urgente && !hecha ? '<span class="text-[10px] font-extrabold px-2 py-1 rounded-full bg-red-100 text-red-800">URGENTE</span>' : "") +
+            (lim && !hecha ? '<span class="text-[10px] font-extrabold px-2 py-1 rounded-full ' + lim.cls + '">' + esc(lim.t) + '</span>' : "") +
+            (hecha ? '<span class="text-[10px] font-extrabold px-2 py-1 rounded-full bg-green-100 text-green-800">TERMINADA</span>' : "") +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      (t.detalle ? '<p class="text-sm text-slate-600 mt-2 whitespace-pre-wrap">' + esc(t.detalle) + '</p>' : "") +
+      (t.foto ? '<img src="' + esc(t.foto) + '" class="ver-foto-tarea mt-3 w-full rounded-2xl cursor-pointer" alt="Foto de la tarea">' : "") +
+      (hecha
+        ? '<div class="mt-3 bg-green-50 border-2 border-green-200 rounded-2xl p-3">' +
+            '<p class="text-[11px] font-extrabold text-green-700 uppercase">Terminada</p>' +
+            '<p class="text-sm text-green-900 mt-1">' + esc(t.hechaEn ? new Date(t.hechaEn).toLocaleDateString("es-MX") + " a las " + hhmm(t.hechaEn) : "") + '</p>' +
+            (t.notaEmpleado ? '<p class="text-sm text-green-900 mt-1 whitespace-pre-wrap">“' + esc(t.notaEmpleado) + '”</p>' : "") +
+          '</div>'
+        : '<button class="marcar-hecha btn w-full mt-3 bg-green-600 hover:bg-green-700 text-white text-lg font-extrabold rounded-2xl" data-id="' + esc(t.id) + '">✅ YA LA HICE</button>');
+    cont.appendChild(div);
+  });
+
+  $$("#lista-mis-tareas .marcar-hecha").forEach((b) =>
+    b.addEventListener("click", () => formTerminarTarea(b.dataset.id)));
+  $$("#lista-mis-tareas .ver-foto-tarea").forEach((im) =>
+    im.addEventListener("click", () => abrirVisor(im.src)));
+  pintarBadgeTareas();
+}
+
+function formTerminarTarea(id) {
+  const t = Datos.tareas.find((x) => x.id === id);
+  if (!t) return;
+  modal(
+    '<h3 class="text-xl font-extrabold">✅ ¿Ya terminaste?</h3>' +
+    '<p class="text-sm text-slate-500 mt-1">' + esc(t.titulo) + '</p>' +
+    '<label class="block text-sm font-bold text-slate-600 mt-4 mb-1">¿Quieres decir algo? (opcional)</label>' +
+    '<textarea id="tar-nota" rows="3" class="w-full text-base border-2 border-slate-200 rounded-2xl p-3" placeholder="Ejemplo: ya quedó, pero falta pintura"></textarea>' +
+    '<div class="grid grid-cols-2 gap-2 mt-4">' +
+      '<button id="tar-cancelar" class="btn-sm bg-slate-100 font-bold rounded-2xl">Cancelar</button>' +
+      '<button id="tar-ok" class="btn-sm bg-green-600 text-white font-extrabold rounded-2xl">Sí, terminé</button>' +
+    '</div>'
+  );
+  $("tar-cancelar").addEventListener("click", cerrarModal);
+  $("tar-ok").addEventListener("click", () => {
+    Datos.upsertTarea({
+      id: id,
+      estado: "hecha",
+      hechaEn: new Date().toISOString(),
+      notaEmpleado: ($("tar-nota").value || "").trim().slice(0, 2000),
+      actualizado: new Date().toISOString()
+    });
+    cerrarModal();
+    aviso("¡Muy bien! La dirección ya lo verá.", "ok");
+    pintarMisTareas();
+  });
+}
+
+/* ============================ TIEMPO EXTRA DEL EMPLEADO ============================ */
+let exHoras = 1;
+
+function textoHoras(h) {
+  if (h === 0.5) return "media hora";
+  if (h === 1) return "hora";
+  return "horas";
+}
+
+function numHoras(h) {
+  const n = Number(h) || 0;
+  return n % 1 === 0 ? String(n) : n.toFixed(1).replace(".", ",");
+}
+
+function pintarExHoras() {
+  $("ex-horas").textContent = numHoras(exHoras);
+  const t = Number(Datos.ajustes.tarifaExtra || 0);
+  $("ex-horas-txt").textContent = textoHoras(exHoras) + (t > 0 ? " \u00b7 $" + (exHoras * t).toLocaleString("es-MX") : "");
+}
+
+function pintarBadgeExtra() {
+  const b = $("badge-extra");
+  if (!b) return;
+  const n = Datos.extrasDe(Sesion.usuario).filter((x) => x.estado === "pendiente").length;
+  b.textContent = n;
+  b.classList.toggle("hidden", n === 0);
+}
+
+function pintarMisExtras() {
+  const cont = $("lista-mis-extras");
+  const mios = Datos.extrasDe(Sesion.usuario);
+  if (!mios.length) {
+    cont.innerHTML = '<div class="bg-white rounded-2xl shadow-sm p-5 text-center">' +
+      '<p class="text-4xl">\u23f0</p>' +
+      '<p class="font-bold text-slate-500 mt-2">Todav\u00eda no has reportado tiempo extra</p></div>';
+    return;
+  }
+  const chips = {
+    pendiente: '<span class="shrink-0 text-[11px] font-extrabold px-2 py-1 rounded-full bg-amber-100 text-amber-700">\u23f3 ESPERANDO APROBACI\u00d3N</span>',
+    aprobada:  '<span class="shrink-0 text-[11px] font-extrabold px-2 py-1 rounded-full bg-green-100 text-green-700">\u2714 APROBADA</span>',
+    rechazada: '<span class="shrink-0 text-[11px] font-extrabold px-2 py-1 rounded-full bg-slate-200 text-slate-600">\u2716 NO APROBADA</span>'
+  };
+  let html = "";
+  mios.forEach((x) => {
+    const h = Number(x.horas) || 0;
+    const monto = Number(x.monto) || 0;
+    html += '<div class="bg-white rounded-2xl shadow-sm p-4">' +
+      '<div class="flex items-start justify-between gap-2">' +
+        '<div class="min-w-0">' +
+          '<p class="font-extrabold leading-tight">' + numHoras(h) + " " + textoHoras(h) + '</p>' +
+          '<p class="text-[11px] text-slate-400">' + esc(fechaCortita(x.fecha)) + '</p>' +
+        '</div>' + (chips[x.estado] || "") +
+      '</div>' +
+      (x.motivo ? '<p class="text-sm text-slate-600 mt-2 whitespace-pre-wrap">' + esc(x.motivo) + '</p>' : "") +
+      (x.estado === "aprobada" && monto > 0
+        ? '<p class="text-sm font-extrabold text-green-700 mt-2">Se te paga $' + monto.toLocaleString("es-MX") + '</p>' : "") +
+      (x.estado === "rechazada" && x.notaAdmin
+        ? '<p class="text-sm text-slate-600 mt-2 bg-slate-50 rounded-xl p-2 whitespace-pre-wrap">' + esc(x.notaAdmin) + '</p>' : "") +
+    '</div>';
+  });
+  cont.innerHTML = html;
+}
+
+function abrirTiempoExtra() {
+  $("ex-fecha").value = fechaISO(new Date());
+  $("ex-fecha").max = fechaISO(new Date());
+  $("ex-motivo").value = "";
+  $("ex-error").classList.add("hidden");
+  exHoras = 1;
+  pintarExHoras();
+  pintarMisExtras();
+  mostrar("pantalla-tiempo-extra");
+}
+
+$("btn-tiempo-extra").addEventListener("click", abrirTiempoExtra);
+$("btn-volver-inicio-4").addEventListener("click", irAInicio);
+$("ex-menos").addEventListener("click", () => { exHoras = Math.max(0.5, exHoras - 0.5); pintarExHoras(); });
+$("ex-mas").addEventListener("click", () => { exHoras = Math.min(12, exHoras + 0.5); pintarExHoras(); });
+
+$("btn-enviar-extra").addEventListener("click", () => {
+  const err = $("ex-error");
+  const fecha = $("ex-fecha").value;
+  const hoy = fechaISO(new Date());
+  if (!fecha) {
+    err.textContent = "Escoge el d\u00eda en que te quedaste m\u00e1s tiempo.";
+    err.classList.remove("hidden"); return;
+  }
+  if (fecha > hoy) {
+    err.textContent = "No puedes reportar un d\u00eda que todav\u00eda no llega.";
+    err.classList.remove("hidden"); return;
+  }
+  const motivo = ($("ex-motivo").value || "").trim();
+  if (motivo.length < 5) {
+    err.textContent = "Escribe por qu\u00e9 te quedaste m\u00e1s tiempo.";
+    err.classList.remove("hidden"); return;
+  }
+  const repetido = Datos.extrasDe(Sesion.usuario)
+    .find((x) => x.fecha === fecha && x.estado !== "rechazada");
+  if (repetido && !confirm("Ya reportaste tiempo extra de ese d\u00eda. \u00bfQuieres mandar otro reporte del mismo d\u00eda?")) return;
+
+  err.classList.add("hidden");
+  const ahora = new Date().toISOString();
+  Datos.upsertExtra({
+    id: idNuevo("x"),
+    usuario: Sesion.usuario,
+    nombre: Sesion.emp.nombre,
+    area: Sesion.emp.area,
+    fecha: fecha,
+    horas: exHoras,
+    motivo: motivo.slice(0, 1000),
+    estado: "pendiente",
+    tarifaHora: 0,
+    monto: 0,
+    notaAdmin: "",
+    revisadoEn: "",
+    creado: ahora,
+    actualizado: ahora
+  });
+  $("ex-motivo").value = "";
+  exHoras = 1;
+  pintarExHoras();
+  pintarMisExtras();
+  pintarBadgeExtra();
+  aviso("Listo. La direcci\u00f3n va a revisar tu tiempo extra.", "ok");
+});
+
 /* ============================ PETICIONES DEL EMPLEADO ============================ */
 let solBorrador = { tipo: "material", urgencia: "media", fotos: [] };
 
@@ -1453,6 +1845,8 @@ $("btn-duda-queja").addEventListener("click", () => abrirSolicitud("duda"));
 $("btn-cancelar-solicitud").addEventListener("click", irAInicio);
 $("btn-volver-inicio-2").addEventListener("click", irAInicio);
 $("btn-mis-solicitudes").addEventListener("click", () => { pintarMisSolicitudes(); mostrar("pantalla-mis-solicitudes"); });
+$("btn-volver-inicio-3").addEventListener("click", irAInicio);
+$("btn-mis-tareas").addEventListener("click", () => { pintarMisTareas(); mostrar("pantalla-mis-tareas"); });
 
 function pintarSolTipos() {
   const cont = $("sol-tipos");
@@ -1780,7 +2174,7 @@ const Admin = {
 
   pintar() {
     $("q-etiqueta").textContent = etiquetaQuincena(this.q);
-    $("selector-quincena").classList.toggle("hidden", this.tab === "peticiones" || this.tab === "ajustes");
+    $("selector-quincena").classList.toggle("hidden", this.tab === "peticiones" || this.tab === "ajustes" || this.tab === "tareas");
     $$("#admin-tabs .tab").forEach((b) => {
       b.className = "tab btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap " +
         (b.dataset.tab === this.tab ? "tab-on" : "tab-off");
@@ -1794,6 +2188,22 @@ const Admin = {
     badge.textContent = pend;
     badge.classList.toggle("hidden", pend === 0);
 
+    const tarPend = Datos.tareas.filter((t) => t.estado === "pendiente").length;
+    const badgeTar = $("admin-badge-tar");
+    if (badgeTar) {
+      badgeTar.textContent = tarPend;
+      badgeTar.classList.toggle("hidden", tarPend === 0);
+    }
+
+    const extPend = Datos.extrasPorAprobar().length;
+    const badgeExt = $("admin-badge-ext");
+    if (badgeExt) {
+      badgeExt.textContent = extPend;
+      badgeExt.classList.toggle("hidden", extPend === 0);
+    }
+
+    if (this.tab === "tareas") this.pintarTareas();
+    if (this.tab === "extra") this.pintarExtra();
     if (this.tab === "resumen") this.pintarResumen();
     if (this.tab === "calendario") this.pintarCalendario();
     if (this.tab === "empleados") this.pintarEmpleados();
@@ -1805,6 +2215,365 @@ const Admin = {
 
   activos() {
     return Datos.empleados.slice().sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+  },
+
+  /* ---------- TAREAS ---------- */
+  tarFiltro: "pendiente",
+  tarEmpleado: "__todos__",
+
+  pintarTareas() {
+    const emps = this.activos();
+    const filtros = [
+      { k: "pendiente", t: "Pendientes", e: "📌" },
+      { k: "hecha", t: "Terminadas", e: "✅" },
+      { k: "todas", t: "Todas", e: "🗂️" }
+    ];
+
+    let lista = Datos.tareas.filter((t) => t.estado !== "cancelada");
+    if (this.tarFiltro !== "todas") lista = lista.filter((t) => t.estado === this.tarFiltro);
+    if (this.tarEmpleado !== "__todos__") lista = lista.filter((t) => t.usuario === this.tarEmpleado);
+    lista.sort((a, b) => {
+      const ua = a.prioridad === "urgente" ? 0 : 1, ub = b.prioridad === "urgente" ? 0 : 1;
+      if (a.estado === b.estado && ua !== ub) return ua - ub;
+      return String(b.creado || "").localeCompare(String(a.creado || ""));
+    });
+
+    let html =
+      '<button id="tar-nueva" class="btn w-full bg-teal-600 hover:bg-teal-700 text-white text-lg font-extrabold rounded-2xl shadow flex items-center justify-center gap-2">' +
+        '<span class="text-2xl">➕</span> ASIGNAR NUEVA TAREA</button>';
+
+    if (!emps.length) {
+      html += '<div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 mt-3 text-sm text-amber-900 font-semibold">' +
+        'Todavía no hay empleados registrados. En cuanto alguien cree su cuenta podrás asignarle tareas.</div>';
+    }
+
+    html += '<div class="scroll-x -mx-1 px-1 mt-3"><div class="flex gap-2 w-max">';
+    filtros.forEach((f) => {
+      html += '<button class="tar-f btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap ' +
+        (this.tarFiltro === f.k ? "tab-on" : "tab-off") + '" data-f="' + f.k + '">' + f.e + " " + f.t + '</button>';
+    });
+    html += '</div></div>';
+
+    html += '<select id="tar-emp-filtro" class="w-full mt-3 text-base border-2 border-slate-200 rounded-2xl p-3 bg-white font-semibold">' +
+      '<option value="__todos__"' + (this.tarEmpleado === "__todos__" ? " selected" : "") + '>👥 Todo el personal</option>';
+    emps.forEach((e) => {
+      html += '<option value="' + esc(e.usuario) + '"' + (this.tarEmpleado === e.usuario ? " selected" : "") + '>' +
+        esc(emojiArea(e.area) + " " + e.nombre) + '</option>';
+    });
+    html += '</select>';
+
+    if (!lista.length) {
+      html += '<div class="bg-white rounded-3xl shadow p-6 text-center text-slate-500 mt-3">' +
+        '<p class="text-4xl">📋</p><p class="font-bold mt-2">Nada por aquí</p>' +
+        '<p class="text-sm mt-1">No hay tareas con este filtro.</p></div>';
+    } else {
+      html += '<div class="mt-3 space-y-3">';
+      lista.forEach((t) => {
+        const hecha = t.estado === "hecha";
+        const urgente = t.prioridad === "urgente";
+        const lim = etiquetaLimite(t.fechaLimite);
+        html +=
+          '<div class="bg-white rounded-2xl shadow-sm p-4 ' + (urgente && !hecha ? "border-2 border-red-300" : "") + '">' +
+            '<div class="flex items-start gap-2">' +
+              '<span class="text-2xl shrink-0">' + (hecha ? "✅" : urgente ? "🔴" : "📌") + '</span>' +
+              '<div class="min-w-0 flex-1">' +
+                '<p class="font-extrabold leading-tight">' + esc(t.titulo) + '</p>' +
+                '<p class="text-xs text-slate-500 mt-0.5 font-semibold">👤 ' + esc(t.nombre || t.usuario) + '</p>' +
+                '<div class="flex flex-wrap gap-1.5 mt-1.5">' +
+                  (hecha ? '<span class="text-[10px] font-extrabold px-2 py-1 rounded-full bg-green-100 text-green-800">TERMINADA</span>' : "") +
+                  (urgente && !hecha ? '<span class="text-[10px] font-extrabold px-2 py-1 rounded-full bg-red-100 text-red-800">URGENTE</span>' : "") +
+                  (lim && !hecha ? '<span class="text-[10px] font-extrabold px-2 py-1 rounded-full ' + lim.cls + '">' + esc(lim.t) + '</span>' : "") +
+                  (!hecha && t.vistoEmpleado ? '<span class="text-[10px] font-extrabold px-2 py-1 rounded-full bg-blue-100 text-blue-800">YA LA VIO</span>' : "") +
+                  (!hecha && !t.vistoEmpleado ? '<span class="text-[10px] font-extrabold px-2 py-1 rounded-full bg-slate-100 text-slate-600">SIN VER</span>' : "") +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            (t.detalle ? '<p class="text-sm text-slate-600 mt-2 whitespace-pre-wrap">' + esc(t.detalle) + '</p>' : "") +
+            (t.foto ? '<img src="' + esc(t.foto) + '" class="tar-foto mt-3 w-full rounded-2xl cursor-pointer" alt="Foto de la tarea">' : "") +
+            (hecha
+              ? '<div class="mt-3 bg-green-50 border-2 border-green-200 rounded-2xl p-3">' +
+                  '<p class="text-[11px] font-extrabold text-green-700 uppercase">La terminó el ' +
+                  esc(t.hechaEn ? new Date(t.hechaEn).toLocaleDateString("es-MX") + " a las " + hhmm(t.hechaEn) : "") + '</p>' +
+                  (t.notaEmpleado ? '<p class="text-sm text-green-900 mt-1 whitespace-pre-wrap">“' + esc(t.notaEmpleado) + '”</p>' : "") +
+                '</div>'
+              : '<div class="grid grid-cols-2 gap-2 mt-3">' +
+                  '<button class="tar-quitar btn-sm bg-slate-100 text-slate-700 font-bold rounded-2xl" data-id="' + esc(t.id) + '">🗑️ Quitar</button>' +
+                  '<button class="tar-cerrar btn-sm bg-green-600 text-white font-extrabold rounded-2xl" data-id="' + esc(t.id) + '">✅ Ya se hizo</button>' +
+                '</div>') +
+          '</div>';
+      });
+      html += '</div>';
+    }
+
+    $("tab-tareas").innerHTML = html;
+
+    $("tar-nueva").addEventListener("click", () => formTareaNueva());
+    $$("#tab-tareas .tar-f").forEach((b) => b.addEventListener("click", () => {
+      this.tarFiltro = b.dataset.f; this.pintarTareas();
+    }));
+    $("tar-emp-filtro").addEventListener("change", (e) => {
+      this.tarEmpleado = e.target.value; this.pintarTareas();
+    });
+    $$("#tab-tareas .tar-foto").forEach((im) => im.addEventListener("click", () => abrirVisor(im.src)));
+    $$("#tab-tareas .tar-cerrar").forEach((b) => b.addEventListener("click", () => {
+      Datos.upsertTarea({ id: b.dataset.id, estado: "hecha", hechaEn: new Date().toISOString(), actualizado: new Date().toISOString() });
+      aviso("Tarea marcada como terminada.", "ok");
+      this.pintarTareas();
+    }));
+    $$("#tab-tareas .tar-quitar").forEach((b) => b.addEventListener("click", () => {
+      const t = Datos.tareas.find((x) => x.id === b.dataset.id);
+      modal(
+        '<h3 class="text-xl font-extrabold">🗑️ ¿Quitar la tarea?</h3>' +
+        '<p class="text-sm text-slate-500 mt-2">' + esc(t ? t.titulo : "") + '</p>' +
+        '<p class="text-sm text-slate-500 mt-2">Ya no le aparecerá al empleado.</p>' +
+        '<div class="grid grid-cols-2 gap-2 mt-4">' +
+          '<button id="qt-no" class="btn-sm bg-slate-100 font-bold rounded-2xl">Cancelar</button>' +
+          '<button id="qt-si" class="btn-sm bg-red-600 text-white font-extrabold rounded-2xl">Sí, quitar</button>' +
+        '</div>'
+      );
+      $("qt-no").addEventListener("click", cerrarModal);
+      $("qt-si").addEventListener("click", () => {
+        Datos.upsertTarea({ id: b.dataset.id, estado: "cancelada", actualizado: new Date().toISOString() });
+        cerrarModal(); aviso("Tarea quitada.", "ok"); this.pintarTareas();
+      });
+    }));
+  },
+
+  /* ---------- TIEMPO EXTRA ---------- */
+  extFiltro: "pendiente",
+  extEmpleado: "__todos__",
+
+  pintarExtra() {
+    const emps = this.activos();
+    const tarifa = Number(Datos.ajustes.tarifaExtra || 0);
+    const filtros = [
+      { k: "pendiente", t: "Por aprobar", e: "\u23f3" },
+      { k: "aprobada",  t: "Aprobadas",   e: "\u2714" },
+      { k: "rechazada", t: "No aprobadas", e: "\u2716" },
+      { k: "todas",     t: "Todas",       e: "\ud83d\uddc2\ufe0f" }
+    ];
+
+    let lista = Datos.extras.slice();
+    if (this.extFiltro !== "todas") lista = lista.filter((x) => x.estado === this.extFiltro);
+    if (this.extEmpleado !== "__todos__") lista = lista.filter((x) => x.usuario === this.extEmpleado);
+    lista.sort((a, b) => {
+      const pa = a.estado === "pendiente" ? 0 : 1, pb = b.estado === "pendiente" ? 0 : 1;
+      if (pa !== pb) return pa - pb;
+      return String(b.fecha || "").localeCompare(String(a.fecha || ""));
+    });
+
+    /* Tarifa por hora extra */
+    let html = '<div class="bg-white rounded-2xl shadow-sm p-4">' +
+      '<p class="font-extrabold">\ud83d\udcb0 Pago por hora extra</p>' +
+      '<p class="text-xs text-slate-400 mt-0.5">Cantidad fija que pagas por cada hora extra. Se congela al momento de aprobar, as\u00ed que si cambias la tarifa no se altera lo ya aprobado.</p>' +
+      '<div class="flex items-center gap-2 mt-3">' +
+        '<span class="text-2xl font-extrabold text-slate-400">$</span>' +
+        '<input id="ext-tarifa" type="number" min="0" step="5" value="' + tarifa + '" ' +
+          'class="flex-1 min-w-0 rounded-2xl border-2 border-slate-200 px-3 py-3 text-xl font-extrabold">' +
+        '<button id="ext-tarifa-ok" class="btn-sm bg-blue-700 text-white font-extrabold rounded-2xl px-4 shrink-0">Guardar</button>' +
+      '</div>' +
+      (tarifa > 0 ? "" : '<p class="text-[11px] text-red-600 font-bold mt-2">Captura la tarifa para poder calcular los pagos.</p>') +
+    '</div>';
+
+    /* ¿A quién le pago extra en esta quincena? */
+    html += '<div class="bg-white rounded-2xl shadow-sm p-4 mt-3">' +
+      '<p class="font-extrabold">\ud83d\udcca \u00bfA qui\u00e9n le pago extra?</p>' +
+      '<p class="text-xs text-slate-400 mt-0.5">Solo cuenta el tiempo extra aprobado de ' + esc(etiquetaQuincena(this.q)) + '.</p>';
+    if (!emps.length) {
+      html += '<p class="text-sm text-slate-400 mt-3">Sin empleados.</p>';
+    } else {
+      let totH = 0, totM = 0;
+      let filas = "";
+      emps.forEach((e) => {
+        const h = Datos.horasExtraDe(e.usuario, this.q);
+        const m = Datos.pagoExtraDe(e.usuario, this.q);
+        totH += h; totM += m;
+        filas += '<div class="flex items-center justify-between gap-2 py-2 border-b border-slate-100 last:border-0">' +
+          '<p class="text-sm font-bold min-w-0 truncate">' + emojiArea(e.area) + " " + esc(e.nombre) + '</p>' +
+          '<div class="text-right shrink-0">' +
+            (h > 0
+              ? '<p class="text-sm font-extrabold text-amber-700">' + numHoras(h) + " " + textoHoras(h) + '</p>' +
+                '<p class="text-[11px] font-bold text-green-700">$' + m.toLocaleString("es-MX") + '</p>'
+              : '<p class="text-sm font-bold text-slate-300">sin tiempo extra</p>') +
+          '</div>' +
+        '</div>';
+      });
+      html += '<div class="mt-2">' + filas + '</div>' +
+        '<div class="flex items-center justify-between gap-2 mt-3 pt-3 border-t-2 border-slate-100">' +
+          '<p class="text-xs uppercase font-bold text-slate-400">Total extra</p>' +
+          '<p class="text-xl font-extrabold text-slate-900">' + numHoras(totH) + " " + textoHoras(totH) +
+            ' \u00b7 $' + totM.toLocaleString("es-MX") + '</p>' +
+        '</div>';
+    }
+    html += '</div>';
+
+    /* Filtros */
+    html += '<div class="scroll-x -mx-1 px-1 mt-3"><div class="flex gap-2 w-max">';
+    filtros.forEach((f) => {
+      html += '<button class="ext-f btn-sm rounded-2xl px-4 font-bold shadow-sm whitespace-nowrap ' +
+        (this.extFiltro === f.k ? "tab-on" : "tab-off") + '" data-f="' + f.k + '">' + f.e + " " + f.t + '</button>';
+    });
+    html += '</div></div>';
+
+    html += '<select id="ext-emp-filtro" class="w-full mt-3 text-base border-2 border-slate-200 rounded-2xl p-3 bg-white font-semibold">' +
+      '<option value="__todos__"' + (this.extEmpleado === "__todos__" ? " selected" : "") + '>\ud83d\udc65 Todo el personal</option>';
+    emps.forEach((e) => {
+      html += '<option value="' + esc(e.usuario) + '"' + (this.extEmpleado === e.usuario ? " selected" : "") + '>' +
+        esc(emojiArea(e.area) + " " + e.nombre) + '</option>';
+    });
+    html += '</select>';
+
+    if (!lista.length) {
+      html += '<div class="bg-white rounded-3xl shadow p-6 text-center text-slate-500 mt-3">' +
+        '<p class="text-4xl">\u23f0</p><p class="font-bold mt-2">Nada por aqu\u00ed</p>' +
+        '<p class="text-sm mt-1">No hay reportes de tiempo extra con este filtro.</p></div>';
+    } else {
+      html += '<div class="mt-3 space-y-3">';
+      lista.forEach((x) => {
+        const h = Number(x.horas) || 0;
+        const pend = x.estado === "pendiente";
+        const apro = x.estado === "aprobada";
+        const previo = tarifa * h;
+        html += '<div class="bg-white rounded-2xl shadow-sm p-4 ' + (pend ? "border-2 border-amber-300" : "") + '">' +
+          '<div class="flex items-start gap-2">' +
+            '<span class="text-2xl shrink-0">' + (apro ? "\u2705" : pend ? "\u23f0" : "\u2716\ufe0f") + '</span>' +
+            '<div class="min-w-0 flex-1">' +
+              '<p class="font-extrabold leading-tight">' + numHoras(h) + " " + textoHoras(h) + '</p>' +
+              '<p class="text-xs text-slate-500 mt-0.5 font-semibold">\ud83d\udc64 ' + esc(x.nombre || x.usuario) + '</p>' +
+              '<p class="text-[11px] text-slate-400">' + esc(fechaCortita(x.fecha)) + '</p>' +
+            '</div>' +
+            '<div class="shrink-0 text-right">' +
+              (apro
+                ? '<p class="text-[10px] font-extrabold px-2 py-1 rounded-full bg-green-100 text-green-800">APROBADA</p>' +
+                  '<p class="text-sm font-extrabold text-green-700 mt-1">$' + (Number(x.monto) || 0).toLocaleString("es-MX") + '</p>'
+                : pend
+                  ? '<p class="text-[10px] font-extrabold px-2 py-1 rounded-full bg-amber-100 text-amber-800">POR APROBAR</p>' +
+                    (tarifa > 0 ? '<p class="text-[11px] font-bold text-slate-400 mt-1">~$' + previo.toLocaleString("es-MX") + '</p>' : "")
+                  : '<p class="text-[10px] font-extrabold px-2 py-1 rounded-full bg-slate-200 text-slate-600">NO APROBADA</p>') +
+            '</div>' +
+          '</div>' +
+          (x.motivo ? '<p class="text-sm text-slate-600 mt-2 whitespace-pre-wrap">' + esc(x.motivo) + '</p>' : "") +
+          (x.notaAdmin ? '<p class="text-sm text-slate-600 mt-2 bg-slate-50 rounded-xl p-2 whitespace-pre-wrap">\ud83d\udcdd ' + esc(x.notaAdmin) + '</p>' : "") +
+          (pend
+            ? '<div class="grid grid-cols-2 gap-2 mt-3">' +
+                '<button class="ext-no btn-sm bg-slate-100 text-slate-700 font-bold rounded-2xl" data-id="' + esc(x.id) + '">\u2716 No aprobar</button>' +
+                '<button class="ext-si btn-sm bg-green-600 text-white font-extrabold rounded-2xl" data-id="' + esc(x.id) + '">\u2714 Aprobar</button>' +
+              '</div>'
+            : '<button class="ext-abrir btn-sm w-full mt-3 bg-slate-50 text-slate-600 font-bold rounded-2xl" data-id="' + esc(x.id) + '">\u21ba Volver a revisar</button>') +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    $("tab-extra").innerHTML = html;
+
+    $("ext-tarifa-ok").addEventListener("click", () => {
+      const v = Math.max(0, Number($("ext-tarifa").value) || 0);
+      Datos.ajustes.tarifaExtra = v;
+      Datos.guardarAjustes();
+      aviso(v > 0 ? "Tarifa guardada: $" + v.toLocaleString("es-MX") + " por hora extra." : "Tarifa borrada.", "ok");
+      this.pintarExtra();
+    });
+    $$("#tab-extra .ext-f").forEach((b) => b.addEventListener("click", () => {
+      this.extFiltro = b.dataset.f; this.pintarExtra();
+    }));
+    $("ext-emp-filtro").addEventListener("change", (e) => {
+      this.extEmpleado = e.target.value; this.pintarExtra();
+    });
+    $$("#tab-extra .ext-si").forEach((b) => b.addEventListener("click", () => this.aprobarExtra(b.dataset.id)));
+    $$("#tab-extra .ext-no").forEach((b) => b.addEventListener("click", () => this.rechazarExtra(b.dataset.id)));
+    $$("#tab-extra .ext-abrir").forEach((b) => b.addEventListener("click", () => {
+      Datos.upsertExtra({ id: b.dataset.id, estado: "pendiente", tarifaHora: 0, monto: 0, notaAdmin: "", actualizado: new Date().toISOString() });
+      aviso("El reporte volvi\u00f3 a la lista de por aprobar.", "ok");
+      this.pintar();
+    }));
+  },
+
+  aprobarExtra(id) {
+    const x = Datos.extras.find((y) => y.id === id);
+    if (!x) return;
+    const tarifa = Number(Datos.ajustes.tarifaExtra || 0);
+    if (tarifa <= 0) {
+      aviso("Primero captura cu\u00e1nto pagas por hora extra.", "warn");
+      return;
+    }
+    const h = Number(x.horas) || 0;
+    modal(
+      '<p class="font-extrabold text-lg">\u2714 Aprobar tiempo extra</p>' +
+      '<p class="text-sm text-slate-500 mt-1">' + esc(x.nombre || x.usuario) + ' \u00b7 ' + esc(fechaBonita(x.fecha)) + '</p>' +
+      '<label class="block mt-3"><span class="text-xs font-bold text-slate-500">Horas que le apruebas</span>' +
+      '<input id="ax-horas" type="number" min="0.5" max="12" step="0.5" value="' + h + '" ' +
+        'class="mt-1 w-full rounded-xl border-2 border-slate-200 px-3 py-3 text-xl font-extrabold"></label>' +
+      '<label class="block mt-3"><span class="text-xs font-bold text-slate-500">Pago por hora (MXN)</span>' +
+      '<input id="ax-tarifa" type="number" min="0" step="5" value="' + tarifa + '" ' +
+        'class="mt-1 w-full rounded-xl border-2 border-slate-200 px-3 py-3 text-xl font-extrabold"></label>' +
+      '<div class="bg-green-50 border-2 border-green-200 rounded-2xl p-3 mt-3 flex items-center justify-between">' +
+        '<p class="text-xs uppercase font-bold text-green-700">Se le paga</p>' +
+        '<p id="ax-total" class="text-2xl font-extrabold text-green-800">$' + (h * tarifa).toLocaleString("es-MX") + '</p>' +
+      '</div>' +
+      '<p id="ax-err" class="hidden text-red-600 font-bold text-sm mt-2"></p>' +
+      '<button id="ax-ok" class="btn w-full mt-4 bg-green-600 text-white font-extrabold rounded-2xl">APROBAR</button>' +
+      '<button id="ax-cancel" class="btn-sm w-full mt-2 text-slate-500 font-bold rounded-2xl">Cancelar</button>'
+    );
+    const recalc = () => {
+      const hh = Number($("ax-horas").value) || 0;
+      const tt = Number($("ax-tarifa").value) || 0;
+      $("ax-total").textContent = "$" + Math.round(hh * tt).toLocaleString("es-MX");
+    };
+    $("ax-horas").addEventListener("input", recalc);
+    $("ax-tarifa").addEventListener("input", recalc);
+    $("ax-cancel").addEventListener("click", cerrarModal);
+    $("ax-ok").addEventListener("click", () => {
+      const hh = Number($("ax-horas").value) || 0;
+      const tt = Number($("ax-tarifa").value) || 0;
+      const err = $("ax-err");
+      if (hh < 0.5 || hh > 12) {
+        err.textContent = "Las horas deben estar entre 0.5 y 12.";
+        err.classList.remove("hidden"); return;
+      }
+      if (tt <= 0) {
+        err.textContent = "Captura el pago por hora.";
+        err.classList.remove("hidden"); return;
+      }
+      Datos.upsertExtra({
+        id: id, estado: "aprobada", horas: hh,
+        tarifaHora: tt, monto: Math.round(hh * tt),
+        notaAdmin: "",
+        revisadoEn: new Date().toISOString(),
+        actualizado: new Date().toISOString()
+      });
+      cerrarModal();
+      aviso("Tiempo extra aprobado \u2705", "ok");
+      this.pintar();
+    });
+  },
+
+  rechazarExtra(id) {
+    const x = Datos.extras.find((y) => y.id === id);
+    if (!x) return;
+    modal(
+      '<p class="font-extrabold text-lg">\u2716 No aprobar</p>' +
+      '<p class="text-sm text-slate-500 mt-1">' + esc(x.nombre || x.usuario) + ' \u00b7 ' + esc(fechaBonita(x.fecha)) + '</p>' +
+      '<label class="block mt-3"><span class="text-xs font-bold text-slate-500">Motivo (lo va a leer el empleado)</span>' +
+      '<textarea id="rx-nota" rows="3" maxlength="1000" placeholder="Ejemplo: Ese d\u00eda saliste a tu hora normal." ' +
+        'class="mt-1 w-full rounded-xl border-2 border-slate-200 p-3"></textarea></label>' +
+      '<div class="grid grid-cols-2 gap-2 mt-4">' +
+        '<button id="rx-cancel" class="btn-sm bg-slate-100 font-bold rounded-2xl">Cancelar</button>' +
+        '<button id="rx-ok" class="btn-sm bg-red-600 text-white font-extrabold rounded-2xl">No aprobar</button>' +
+      '</div>'
+    );
+    $("rx-cancel").addEventListener("click", cerrarModal);
+    $("rx-ok").addEventListener("click", () => {
+      Datos.upsertExtra({
+        id: id, estado: "rechazada", tarifaHora: 0, monto: 0,
+        notaAdmin: ($("rx-nota").value || "").trim().slice(0, 1000),
+        revisadoEn: new Date().toISOString(),
+        actualizado: new Date().toISOString()
+      });
+      cerrarModal();
+      aviso("Marcado como no aprobado.", "ok");
+      this.pintar();
+    });
   },
 
   /* ---------- RESUMEN ---------- */
@@ -2052,13 +2821,15 @@ const Admin = {
 
     let html = '<div class="bg-white rounded-2xl shadow-sm p-4">' +
       '<p class="font-extrabold">💵 Pago de la quincena</p>' +
-      '<p class="text-xs text-slate-400">Pago = sueldo diario × días trabajados. Ajusta el sueldo de cada persona en Empleados → Editar.</p></div>';
+      '<p class="text-xs text-slate-400">Pago = (sueldo diario × días trabajados) + tiempo extra aprobado. Ajusta el sueldo de cada persona en Empleados → Editar y la tarifa extra en la pestaña Tiempo extra.</p></div>';
 
     if (!emps.length) html += '<div class="bg-white rounded-2xl shadow-sm p-4 mt-3 text-slate-400">Sin empleados</div>';
     emps.forEach((e) => {
       const k = kpisDe(e.usuario, this.q);
       const sd = Number(e.sueldoDiario || 0);
-      const tot = sd * k.dias;
+      const hEx = Datos.horasExtraDe(e.usuario, this.q);
+      const mEx = Datos.pagoExtraDe(e.usuario, this.q);
+      const tot = sd * k.dias + mEx;
       const ya = !!pagados[e.usuario];
       if (!ya) totalPagar += tot;
       html += '<div class="bg-white rounded-2xl shadow-sm p-4 mt-3' + (ya ? ' ring-2 ring-green-500' : '') + '">' +
@@ -2074,9 +2845,15 @@ const Admin = {
           '<div class="bg-slate-50 rounded-xl py-2"><p class="text-lg font-extrabold ' + (sd ? 'text-slate-700' : 'text-red-600') + '">' + (sd ? "$" + sd.toLocaleString("es-MX") : "\u2014") + '</p><p class="text-[10px] text-slate-500 font-semibold">Sueldo/d\u00eda</p></div>' +
         '</div>' +
         (sd ? '' : '<p class="text-[11px] text-red-600 font-semibold mt-2">Falta capturar el sueldo diario en Empleados \u2192 Editar.</p>') +
+        (hEx > 0
+          ? '<div class="flex items-center justify-between gap-2 mt-3 bg-amber-50 border-2 border-amber-200 rounded-xl px-3 py-2">' +
+              '<p class="text-[11px] font-extrabold text-amber-800 uppercase">\u23f0 Tiempo extra \u00b7 ' + numHoras(hEx) + " " + textoHoras(hEx) + '</p>' +
+              '<p class="text-base font-extrabold text-amber-800">+$' + mEx.toLocaleString("es-MX") + '</p>' +
+            '</div>'
+          : "") +
         '<div class="flex items-center justify-between gap-3 mt-3 pt-3 border-t border-slate-100">' +
           '<div><p class="text-[10px] uppercase font-bold text-slate-400">Total a pagar</p>' +
-          '<p class="text-2xl font-extrabold text-slate-900">' + (sd ? "$" + tot.toLocaleString("es-MX") : "\u2014") + '</p></div>' +
+          '<p class="text-2xl font-extrabold text-slate-900">' + (sd || mEx ? "$" + tot.toLocaleString("es-MX") : "\u2014") + '</p></div>' +
           '<label class="btn-sm flex items-center gap-2 bg-slate-50 rounded-xl px-3 font-bold text-sm cursor-pointer">' +
           '<input type="checkbox" class="pago-chk w-6 h-6 accent-green-600" data-u="' + esc(e.usuario) + '"' + (ya ? " checked" : "") + '>Ya pagu\u00e9</label>' +
         '</div></div>';
@@ -2308,6 +3085,132 @@ $("q-siguiente").addEventListener("click", () => { Admin.q = moverQuincena(Admin
 $$("#admin-tabs .tab").forEach((b) => b.addEventListener("click", () => { Admin.tab = b.dataset.tab; Admin.pintar(); }));
 
 /* ============================ FORMULARIOS ADMIN ============================ */
+/* ---------- ASIGNAR TAREA (dirección) ---------- */
+let tarFotoNueva = null;
+
+function formTareaNueva() {
+  const emps = Admin.activos();
+  if (!emps.length) {
+    modal(
+      '<h3 class="text-xl font-extrabold">Sin empleados todavía</h3>' +
+      '<p class="text-sm text-slate-500 mt-2">Nadie ha creado su cuenta. Pide al personal que abra el enlace y se registre.</p>' +
+      '<button id="nt-ok" class="btn-sm w-full mt-4 bg-slate-100 font-bold rounded-2xl">Entendido</button>'
+    );
+    $("nt-ok").addEventListener("click", cerrarModal);
+    return;
+  }
+  tarFotoNueva = null;
+  const hoy = fechaISO(new Date());
+
+  let ops = "";
+  emps.forEach((e) => {
+    ops += '<option value="' + esc(e.usuario) + '">' + esc(emojiArea(e.area) + " " + e.nombre) + '</option>';
+  });
+
+  modal(
+    '<h3 class="text-xl font-extrabold">📌 Asignar una tarea</h3>' +
+
+    '<label class="block text-sm font-bold text-slate-600 mt-4 mb-1">¿A quién?</label>' +
+    '<select id="nt-usuario" class="w-full text-base border-2 border-slate-200 rounded-2xl p-3 bg-white font-semibold">' +
+      '<option value="__todos__">👥 A TODO EL PERSONAL</option>' + ops + '</select>' +
+
+    '<label class="block text-sm font-bold text-slate-600 mt-3 mb-1">¿Qué hay que hacer?</label>' +
+    '<input id="nt-titulo" type="text" maxlength="120" class="w-full text-base border-2 border-slate-200 rounded-2xl p-3" placeholder="Ejemplo: Podar el pasto de la cancha">' +
+
+    '<label class="block text-sm font-bold text-slate-600 mt-3 mb-1">Instrucciones (opcional)</label>' +
+    '<textarea id="nt-detalle" rows="3" maxlength="2000" class="w-full text-base border-2 border-slate-200 rounded-2xl p-3" placeholder="Explica con detalle cómo quieres que quede"></textarea>' +
+
+    '<label class="block text-sm font-bold text-slate-600 mt-3 mb-1">¿Para cuándo? (opcional)</label>' +
+    '<input id="nt-fecha" type="date" min="' + hoy + '" class="w-full text-base border-2 border-slate-200 rounded-2xl p-3">' +
+
+    '<label class="block text-sm font-bold text-slate-600 mt-3 mb-1">¿Es urgente?</label>' +
+    '<div class="grid grid-cols-2 gap-2">' +
+      '<button id="nt-normal" class="btn-sm rounded-2xl font-bold tab-on">📌 Normal</button>' +
+      '<button id="nt-urgente" class="btn-sm rounded-2xl font-bold tab-off">🔴 Urgente</button>' +
+    '</div>' +
+
+    '<label class="block text-sm font-bold text-slate-600 mt-3 mb-1">Foto de apoyo (opcional)</label>' +
+    '<input id="nt-foto" type="file" accept="image/*" class="w-full text-sm border-2 border-slate-200 rounded-2xl p-3">' +
+    '<div id="nt-vista" class="mt-2"></div>' +
+
+    '<p id="nt-error" class="hidden text-sm font-bold text-red-600 mt-3"></p>' +
+
+    '<div class="grid grid-cols-2 gap-2 mt-4">' +
+      '<button id="nt-cancelar" class="btn-sm bg-slate-100 font-bold rounded-2xl">Cancelar</button>' +
+      '<button id="nt-guardar" class="btn-sm bg-teal-600 text-white font-extrabold rounded-2xl">Asignar</button>' +
+    '</div>'
+  );
+
+  let prioridad = "normal";
+  const pintaPrio = () => {
+    $("nt-normal").className = "btn-sm rounded-2xl font-bold " + (prioridad === "normal" ? "tab-on" : "tab-off");
+    $("nt-urgente").className = "btn-sm rounded-2xl font-bold " + (prioridad === "urgente" ? "tab-on" : "tab-off");
+  };
+  $("nt-normal").addEventListener("click", () => { prioridad = "normal"; pintaPrio(); });
+  $("nt-urgente").addEventListener("click", () => { prioridad = "urgente"; pintaPrio(); });
+
+  $("nt-foto").addEventListener("change", async (ev) => {
+    const f = ev.target.files && ev.target.files[0];
+    if (!f) { tarFotoNueva = null; $("nt-vista").innerHTML = ""; return; }
+    $("nt-vista").innerHTML = '<p class="text-sm text-slate-500">Preparando la foto…</p>';
+    const d = await comprimir(f, 700, 0.55);
+    if (!d || d.length > 700000) {
+      tarFotoNueva = null;
+      $("nt-vista").innerHTML = '<p class="text-sm font-bold text-red-600">Esa foto es muy grande. Intenta con otra.</p>';
+      return;
+    }
+    tarFotoNueva = d;
+    $("nt-vista").innerHTML = '<img src="' + d + '" class="w-full rounded-2xl" alt="Vista previa">';
+  });
+
+  $("nt-cancelar").addEventListener("click", () => { tarFotoNueva = null; cerrarModal(); });
+
+  $("nt-guardar").addEventListener("click", () => {
+    const err = $("nt-error");
+    const titulo = ($("nt-titulo").value || "").trim();
+    if (titulo.length < 4) {
+      err.textContent = "Escribe qué hay que hacer (mínimo 4 letras).";
+      err.classList.remove("hidden");
+      return;
+    }
+    err.classList.add("hidden");
+
+    const destino = $("nt-usuario").value;
+    const detalle = ($("nt-detalle").value || "").trim().slice(0, 2000);
+    const fecha = $("nt-fecha").value || "";
+    const ahora = new Date().toISOString();
+    const paraQuienes = destino === "__todos__" ? emps : emps.filter((e) => e.usuario === destino);
+
+    paraQuienes.forEach((e) => {
+      Datos.upsertTarea({
+        id: idNuevo("t"),
+        usuario: e.usuario,
+        nombre: e.nombre,
+        area: e.area,
+        titulo: titulo.slice(0, 200),
+        detalle: detalle,
+        prioridad: prioridad,
+        fechaLimite: fecha,
+        estado: "pendiente",
+        vistoEmpleado: false,
+        hechaEn: "",
+        notaEmpleado: "",
+        foto: tarFotoNueva || "",
+        creado: ahora,
+        actualizado: ahora
+      });
+    });
+
+    tarFotoNueva = null;
+    cerrarModal();
+    aviso(paraQuienes.length === 1
+      ? "Tarea asignada a " + paraQuienes[0].nombre + "."
+      : "Tarea asignada a " + paraQuienes.length + " personas.", "ok");
+    Admin.tarFiltro = "pendiente";
+    Admin.pintarTareas();
+  });
+}
+
 function formEmpleado(usuario) {
   const e = usuario ? Datos.empleado(usuario) : null;
   modal(
@@ -2482,13 +3385,30 @@ function exportarCSV(q) {
   const emps = Admin.activos();
   const clave = claveQuincena(q);
   const pagados = Datos.ajustes.pagados[clave] || {};
-  const filas = [["Empleado","Usuario","Area","Dias trabajados","Horas","Faltas","Puntualidad %","Con reporte %","Con foto %","Calificacion","Sueldo diario","Total a pagar","Pagado"]];
+  const filas = [["Empleado","Usuario","Area","Dias trabajados","Horas","Faltas","Puntualidad %","Con reporte %","Con foto %","Calificacion","Sueldo diario","Sueldo del periodo","Horas extra aprobadas","Pago tiempo extra","Total a pagar","Pagado"]];
   emps.forEach((e) => {
     const k = kpisDe(e.usuario, q);
     const sd = Number(e.sueldoDiario || 0);
+    const hEx = Datos.horasExtraDe(e.usuario, q);
+    const mEx = Datos.pagoExtraDe(e.usuario, q);
     filas.push([e.nombre, e.usuario, e.area, k.dias, (k.minutos / 60).toFixed(2), k.faltas,
-      k.pctPuntual, k.pctReporte, k.pctFoto, k.calificacion, sd, sd * k.dias, pagados[e.usuario] ? "SI" : "NO"]);
+      k.pctPuntual, k.pctReporte, k.pctFoto, k.calificacion, sd, sd * k.dias,
+      hEx, mEx, sd * k.dias + mEx, pagados[e.usuario] ? "SI" : "NO"]);
   });
+  filas.push([]);
+  filas.push(["Detalle de tiempo extra"]);
+  filas.push(["Fecha","Empleado","Area","Horas","Estado","Pago por hora","Total","Motivo del empleado","Nota de la direccion"]);
+  const { ini: qi, fin: qf } = rangoQuincena(q);
+  const di = fechaISO(qi), df = fechaISO(qf);
+  Datos.extras
+    .filter((x) => String(x.fecha || "") >= di && String(x.fecha || "") <= df)
+    .sort((a, b) => String(a.fecha || "").localeCompare(String(b.fecha || "")))
+    .forEach((x) => {
+      filas.push([x.fecha, x.nombre || x.usuario, x.area || "", Number(x.horas) || 0,
+        x.estado === "aprobada" ? "APROBADA" : x.estado === "rechazada" ? "NO APROBADA" : "POR APROBAR",
+        Number(x.tarifaHora) || 0, Number(x.monto) || 0,
+        (x.motivo || "").replace(/\s+/g, " "), (x.notaAdmin || "").replace(/\s+/g, " ")]);
+    });
   filas.push([]);
   filas.push(["Detalle de jornadas"]);
   filas.push(["Fecha","Empleado","Area","Entrada","Salida","Horas","Fotos","Reporte"]);
@@ -2505,7 +3425,8 @@ function respaldoJSON() {
   const obj = {
     version: VERSION, generado: new Date().toISOString(),
     empleados: Datos.empleados, jornadas: Datos.jornadas,
-    solicitudes: Datos.solicitudes, ajustes: Datos.ajustes
+    solicitudes: Datos.solicitudes, tareas: Datos.tareas,
+    extras: Datos.extras, ajustes: Datos.ajustes
   };
   descargar("khepani_respaldo_" + fechaISO(new Date()) + ".json", JSON.stringify(obj, null, 2), "application/json");
   aviso("Respaldo descargado 💾");
