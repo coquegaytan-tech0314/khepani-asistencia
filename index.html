@@ -177,14 +177,29 @@
     <!-- PANTALLA 1: BIENVENIDA / ENTRAR AL TRABAJO           -->
     <!-- ==================================================== -->
     <section id="pantalla-inicio" class="hidden fade-in">
-      <div class="bg-white rounded-3xl shadow p-5 text-center">
+      <div id="caja-bienvenida" class="bg-white rounded-3xl shadow p-5 text-center">
         <div class="text-6xl">👋</div>
         <h2 id="saludo" class="text-2xl font-extrabold mt-2">¡Buen día!</h2>
         <p class="text-slate-500 mt-1 text-base">Presiona el botón azul para registrar tu entrada.</p>
       </div>
 
+      <!-- Banner: estás trabajando ahora (contador en vivo) -->
+      <div id="banner-trabajando" class="hidden bg-green-100 border-2 border-green-300 rounded-3xl p-5 text-center">
+        <div class="flex items-center justify-center gap-2">
+          <span class="text-3xl">✅</span>
+          <p class="font-extrabold text-green-800 text-xl">Estás trabajando</p>
+        </div>
+        <p class="text-green-700 mt-1">Entraste a las <span id="inicio-entrada" class="font-bold">--:--</span></p>
+        <p class="text-4xl font-extrabold text-green-800 tabular-nums mt-2" id="inicio-transcurrido">0 h 0 min</p>
+        <p class="text-green-700 text-sm mt-1">El tiempo sigue corriendo. Puedes moverte sin problema.</p>
+      </div>
+
       <button id="btn-entrar" class="btn w-full mt-5 bg-blue-700 hover:bg-blue-800 text-white text-2xl font-extrabold rounded-3xl shadow-lg py-5 flex items-center justify-center gap-3">
         <span class="text-3xl">🕐</span> ENTRAR AL TRABAJO
+      </button>
+
+      <button id="btn-volver-trabajo" class="hidden btn w-full mt-5 bg-green-600 hover:bg-green-700 text-white text-2xl font-extrabold rounded-3xl shadow-lg py-5 flex items-center justify-center gap-3">
+        <span class="text-3xl">📝</span> SEGUIR / TERMINAR TRABAJO
       </button>
 
       <div class="grid grid-cols-2 gap-3 mt-4">
@@ -240,6 +255,10 @@
     <!-- PANTALLA 2: REPORTE DEL DÍA                          -->
     <!-- ==================================================== -->
     <section id="pantalla-trabajo" class="hidden fade-in">
+      <div class="flex items-center justify-between mb-3">
+        <button id="btn-volver-inicio-5" class="btn-sm text-blue-700 font-bold px-2">← Inicio</button>
+        <span class="text-sm font-semibold text-slate-400">Tu entrada sigue registrada</span>
+      </div>
       <div class="bg-green-100 border-2 border-green-300 rounded-3xl p-4 flex items-center gap-3">
         <span class="text-3xl">✅</span>
         <div class="min-w-0">
@@ -1075,6 +1094,8 @@ function tic() {
     const min = (Date.now() - Date.parse(Sesion.activa.entrada)) / 60000;
     const el = $("txt-transcurrido");
     if (el) el.textContent = horasTexto(min);
+    const el2 = $("inicio-transcurrido");
+    if (el2) el2.textContent = horasTexto(min);
   }
 }
 
@@ -1323,8 +1344,27 @@ function irAInicio() {
   const h = new Date().getHours();
   const saludo = h < 12 ? "¡Buen día" : h < 19 ? "¡Buenas tardes" : "¡Buenas noches";
   $("saludo").textContent = saludo + ", " + Sesion.emp.nombre.split(" ")[0] + "!";
+  pintarEstadoTrabajo();
   pintarHistorial(); pintarMisKpis(); pintarBadge(); pintarBadgeTareas(); pintarBadgeExtra();
   mostrar("pantalla-inicio");
+}
+
+/* Muestra el banner "estás trabajando" con contador en vivo si hay jornada abierta. */
+function pintarEstadoTrabajo() {
+  const trabajando = !!(Sesion.activa && Sesion.activa.entrada && !Sesion.activa.salida);
+  const banner = $("banner-trabajando");
+  const bienvenida = $("caja-bienvenida");
+  const btnEntrar = $("btn-entrar");
+  const btnVolver = $("btn-volver-trabajo");
+  if (banner) banner.classList.toggle("hidden", !trabajando);
+  if (bienvenida) bienvenida.classList.toggle("hidden", trabajando);
+  if (btnEntrar) btnEntrar.classList.toggle("hidden", trabajando);
+  if (btnVolver) btnVolver.classList.toggle("hidden", !trabajando);
+  if (trabajando) {
+    const e = $("inicio-entrada");
+    if (e) e.textContent = hhmm(Sesion.activa.entrada);
+    tic();
+  }
 }
 
 $("btn-entrar").addEventListener("click", () => {
@@ -1780,6 +1820,8 @@ function abrirTiempoExtra() {
 
 $("btn-tiempo-extra").addEventListener("click", abrirTiempoExtra);
 $("btn-volver-inicio-4").addEventListener("click", irAInicio);
+$("btn-volver-inicio-5").addEventListener("click", irAInicio);
+$("btn-volver-trabajo").addEventListener("click", () => { if (Sesion.activa) irATrabajo(); });
 $("ex-menos").addEventListener("click", () => { exHoras = Math.max(0.5, exHoras - 0.5); pintarExHoras(); });
 $("ex-mas").addEventListener("click", () => { exHoras = Math.min(12, exHoras + 0.5); pintarExHoras(); });
 
