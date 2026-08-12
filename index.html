@@ -927,6 +927,15 @@ const Datos = {
     this.guardarEmpleados();
     Nube.escribir("khepani_empleados", emp.usuario, this.empleado(emp.usuario));
   },
+  /* Borrado suave: el empleado desaparece de todas las listas y de todos los
+     telefonos, pero se puede restaurar. No borra su historial de asistencia. */
+  eliminarEmpleado(usuario) {
+    this.upsertEmpleado({ usuario, eliminado: true, activo: false, actualizado: new Date().toISOString() });
+  },
+  restaurarEmpleado(usuario) {
+    this.upsertEmpleado({ usuario, eliminado: false, activo: true, actualizado: new Date().toISOString() });
+  },
+  eliminados() { return this.empleados.filter((e) => e.eliminado); },
   upsertJornada(j) {
     const i = this.jornadas.findIndex((x) => x.id === j.id);
     if (i >= 0) this.jornadas[i] = Object.assign({}, this.jornadas[i], j);
@@ -1230,7 +1239,7 @@ function intentarLogin() {
   if (!usuario) { errorLogin("Escribe tu usuario."); return; }
   if (nipActual.length !== 4) { errorLogin("Tu NIP son 4 números."); return; }
   const emp = Datos.empleado(usuario);
-  if (!emp) { errorLogin("Ese usuario no existe. Si eres nuevo, crea tu cuenta."); nipActual = ""; pintarNipPuntos(); return; }
+  if (!emp || emp.eliminado) { errorLogin("Ese usuario no existe. Si eres nuevo, crea tu cuenta."); nipActual = ""; pintarNipPuntos(); return; }
   if (emp.activo === false) { errorLogin("Tu cuenta está desactivada. Habla con la dirección."); nipActual = ""; pintarNipPuntos(); return; }
   if (emp.nipHash !== hashNip(usuario, nipActual)) {
     errorLogin("NIP incorrecto. Inténtalo otra vez.");
@@ -1244,7 +1253,7 @@ $("btn-login").addEventListener("click", intentarLogin);
 $("login-usuario").addEventListener("keydown", (e) => { if (e.key === "Enter") intentarLogin(); });
 
 function pintarUsuariosRecientes() {
-  const recientes = Almacen.leerJSON(K.recientes, []).filter((u) => Datos.empleado(u));
+  const recientes = Almacen.leerJSON(K.recientes, []).filter((u) => { const e = Datos.empleado(u); return e && !e.eliminado; });
   const caja = $("caja-usuarios-rapidos");
   const cont = $("usuarios-rapidos");
   cont.innerHTML = "";
@@ -2255,7 +2264,7 @@ const Admin = {
   },
 
   activos() {
-    return Datos.empleados.slice().sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+    return Datos.empleados.filter((e) => !e.eliminado).slice().sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
   },
 
   /* ---------- TAREAS ---------- */
@@ -2843,14 +2852,37 @@ const Admin = {
         '<div class="flex gap-2 mt-3">' +
           '<button class="edit-emp btn-sm flex-1 bg-slate-100 font-bold rounded-xl text-sm" data-u="' + esc(e.usuario) + '">✏️ Editar</button>' +
           '<button class="nip-emp btn-sm flex-1 bg-amber-100 text-amber-800 font-bold rounded-xl text-sm" data-u="' + esc(e.usuario) + '">🔑 Cambiar NIP</button>' +
-        '</div></div>';
+        '</div>' +
+        '<button class="del-emp btn-sm w-full mt-2 bg-red-50 text-red-700 font-bold rounded-xl text-sm" data-u="' + esc(e.usuario) + '" data-n="' + esc(e.nombre) + '">🗑️ Eliminar empleado</button>' +
+        '</div>';
     });
+
+    const borrados = Datos.eliminados().slice().sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+    if (borrados.length) {
+      html += '<div class="bg-white rounded-2xl shadow-sm p-4 mt-4">' +
+        '<p class="font-extrabold text-slate-500">\ud83d\uddd1\ufe0f Eliminados (' + borrados.length + ')</p>' +
+        '<p class="text-xs text-slate-400 mt-1">Ya no aparecen en ninguna lista ni pueden entrar. Puedes restaurarlos.</p>';
+      borrados.forEach((e) => {
+        html += '<div class="flex items-center gap-3 mt-3">' +
+          '<div class="min-w-0 flex-1"><p class="font-bold truncate text-slate-600">' + esc(e.nombre) + '</p>' +
+          '<p class="text-xs text-slate-400 truncate">' + emojiArea(e.area) + " " + esc(e.area) + ' \u00b7 @' + esc(e.usuario) + '</p></div>' +
+          '<button class="restore-emp btn-sm bg-green-100 text-green-800 font-bold rounded-xl px-3 text-sm shrink-0" data-u="' + esc(e.usuario) + '">\u21a9 Restaurar</button>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
 
     $("tab-empleados").innerHTML = html;
     const nb = $("btn-nuevo-emp");
     if (nb) nb.addEventListener("click", () => formEmpleado(null));
     $$("#tab-empleados .edit-emp").forEach((b) => b.addEventListener("click", () => formEmpleado(b.dataset.u)));
     $$("#tab-empleados .nip-emp").forEach((b) => b.addEventListener("click", () => formNip(b.dataset.u)));
+    $$("#tab-empleados .del-emp").forEach((b) => b.addEventListener("click", () => confirmarEliminarEmpleado(b.dataset.u, b.dataset.n)));
+    $$("#tab-empleados .restore-emp").forEach((b) => b.addEventListener("click", () => {
+      Datos.restaurarEmpleado(b.dataset.u);
+      aviso("Empleado restaurado \u2705");
+      Admin.pintar();
+    }));
   },
 
   /* ---------- NÓMINA ---------- */
@@ -3279,7 +3311,7 @@ function formEmpleado(usuario) {
     const usu = $("fe-usuario").value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
     if (nombre.length < 5) return err("Escribe nombre y apellido.");
     if (usu.length < 4) return err("Usuario de al menos 4 caracteres.");
-    if (!e && Datos.empleado(usu)) return err("Ese usuario ya existe.");
+    if (!e) { const ya = Datos.empleado(usu); if (ya && !ya.eliminado) return err("Ese usuario ya existe."); }
     const datos = {
       usuario: usu, nombre, area: $("fe-area").value,
       sueldoDiario: Math.max(0, Number($("fe-sueldo").value) || 0),
@@ -3291,11 +3323,32 @@ function formEmpleado(usuario) {
       if (!/^\d{4}$/.test(nip)) return err("El NIP inicial debe ser de 4 números.");
       datos.nipHash = hashNip(usu, nip);
       datos.activo = true;
+      datos.eliminado = false;
       datos.creado = new Date().toISOString();
     }
     Datos.upsertEmpleado(datos);
     cerrarModal();
     aviso("Empleado guardado ✅");
+    Admin.pintar();
+  });
+}
+
+function confirmarEliminarEmpleado(usuario, nombre) {
+  const e = Datos.empleado(usuario);
+  if (!e) return;
+  const nom = nombre || e.nombre;
+  modal(
+    '<p class="font-extrabold text-lg">\ud83d\uddd1\ufe0f Eliminar empleado</p>' +
+    '<p class="text-slate-600 mt-2">\u00bfSeguro que quieres eliminar a <b>' + esc(nom) + '</b> (@' + esc(usuario) + ')?</p>' +
+    '<p class="text-sm text-slate-500 mt-2">Ya no podr\u00e1 entrar y desaparecer\u00e1 de todas las listas en todos los tel\u00e9fonos. Su historial de asistencia se conserva y lo puedes restaurar despu\u00e9s.</p>' +
+    '<button id="de-ok" class="btn w-full mt-4 bg-red-600 text-white font-extrabold rounded-2xl">S\u00cd, ELIMINAR</button>' +
+    '<button id="de-cancel" class="btn-sm w-full mt-2 text-slate-500 font-bold rounded-2xl">Cancelar</button>'
+  );
+  $("de-cancel").addEventListener("click", cerrarModal);
+  $("de-ok").addEventListener("click", () => {
+    Datos.eliminarEmpleado(usuario);
+    cerrarModal();
+    aviso("Empleado eliminado \ud83d\uddd1\ufe0f");
     Admin.pintar();
   });
 }
